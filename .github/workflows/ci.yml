@@ -1,0 +1,39 @@
+name: ci
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successfully."
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
+      # - name: Set up Flutter
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: stable
+      # - name: Resolve Flutter dependency
+      #   run: flutter pub get
+      # - name: Analyze and build
+      #   run: flutter analyze && flutter build apk --release
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: apk-artifact
+      #     path: build/app/outputs/apk/release/app-release.apk
+  release:
+    # if: ${{ github.ref_type == 'tag' }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.ref }}"
+      - run: echo "${{ github.ref_type }}"
+      - run: echo "${{ github.ref_name }}"
