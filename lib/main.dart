@@ -1,5 +1,5 @@
-import 'package:chat_app/view/page/home_page.dart';
-import 'package:flutter/material.dart';
+import 'package:chat_app/router/router.dart';
+import 'package:flutter/material.dart' hide Router;
 
 void main() {
   runApp(const MainApp());
@@ -10,14 +10,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: "Squid Chat",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      routerConfig: Router.routerConfig,
     );
   }
 }
