@@ -7,8 +7,6 @@ on:
       - opened
       - reopened
   push:
-    branches:
-      - main
     tags:
       - v*
 jobs:
