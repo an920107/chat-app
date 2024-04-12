@@ -4,9 +4,13 @@ import 'package:intl/intl.dart';
 class MessageTile extends StatelessWidget {
   const MessageTile({
     super.key,
+    required this.content,
+    required this.sendTime,
     required this.isMe,
   });
 
+  final String content;
+  final DateTime sendTime;
   final bool isMe;
 
   @override
@@ -36,11 +40,10 @@ class MessageTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (isMe)
-                _buildSendTime(isMe: isMe, time: DateTime.now()),
+                _buildSendTime(),
               ConstrainedBox(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   minHeight: 36,
-                  maxWidth: MediaQuery.of(context).size.width / 1.6,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
@@ -52,19 +55,24 @@ class MessageTile extends StatelessWidget {
                       bottomLeft: const Radius.circular(10),
                     ),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "Hello!!!\nasasdasd\naasqweqweq\nn1231231231aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2",
-                        softWrap: true,
+                      padding: const EdgeInsets.all(10),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 1.6,
+                        ),
+                        child: Text(
+                          content,
+                          softWrap: true,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
               if (!isMe)
-                _buildSendTime(isMe: isMe, time: DateTime.now()),
+                _buildSendTime(),
             ],
           ),
         ],
@@ -72,14 +80,14 @@ class MessageTile extends StatelessWidget {
     );
   }
 
-  Widget _buildSendTime({required bool isMe,required DateTime time}) {
+  Widget _buildSendTime() {
     return Padding(
       padding: EdgeInsets.only(
         left: isMe ? 0 : 10,
         right: isMe ? 10 : 0,
       ),
       child: Text(
-        DateFormat(DateFormat.HOUR24_MINUTE).format(time),
+        DateFormat(DateFormat.HOUR24_MINUTE).format(sendTime),
         style: const TextStyle(color: Colors.grey, fontSize: 12),
       ),
     );

@@ -6,12 +6,14 @@ import 'package:intl/intl.dart';
 class ChatPreviewTile extends StatelessWidget {
   const ChatPreviewTile({
     super.key,
+    required this.roomId,
     required this.name,
     required this.lastMessage,
     required this.lastTime,
     required this.unread,
   });
 
+  final String roomId;
   final String name;
   final String lastMessage;
   final DateTime lastTime;
@@ -20,7 +22,7 @@ class ChatPreviewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.push("${Routes.chat.path}/id"),
+      onTap: () => context.push("${Routes.chat.path}/$roomId"),
       /// TODO: user avatar
       leading: ClipOval(
         child: Container(
