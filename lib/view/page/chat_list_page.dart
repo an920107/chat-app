@@ -1,25 +1,25 @@
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ChatListPage extends StatefulWidget {
+  const ChatListPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ChatListPage> createState() => _ChatListPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ChatListPageState extends State<ChatListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Chat Room"),
+        surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(5),
-          child: Divider(),
-        ),
+        title: const Text("Let's Chat"),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+          const SizedBox(width: 10),
+        ],
       ),
       body: ListView(
         children: [

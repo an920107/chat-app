@@ -1,4 +1,6 @@
+import 'package:chat_app/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ChatPreviewTile extends StatelessWidget {
@@ -18,6 +20,8 @@ class ChatPreviewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () => context.push("${Routes.chat.path}/id"),
+      /// TODO: user avatar
       leading: ClipOval(
         child: Container(
           color: Colors.grey,
