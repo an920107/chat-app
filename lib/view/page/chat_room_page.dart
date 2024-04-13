@@ -88,7 +88,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 10,
-                          vertical: 0,
+                          vertical: 6,
                         ),
                         border: OutlineInputBorder(
                             borderRadius:
