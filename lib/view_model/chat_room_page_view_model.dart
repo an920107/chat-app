@@ -1,4 +1,3 @@
-import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/repo/message_local_repo.dart';
 import 'package:chat_app/repo/room_local_repo.dart';
@@ -32,15 +31,5 @@ class ChatRoomPageViewModel with ChangeNotifier {
     _room.messageIds.add(message.id);
     await RoomLocalRepo.patchMessage(_room.id, _room.messageIds);
     notifyListeners();
-  }
-}
-
-extension IdToMessage on String {
-  Future<Message> toMessage() async {
-    final message = await MessageLocalRepo.getMessage(this);
-    if (message == null) throw Exception("Message not found");
-    // TODO: user id
-    message.isMe = message.sourceUid == "6b38a418-5ada-4c69-8cac-6354d74b4811";
-    return message;
   }
 }

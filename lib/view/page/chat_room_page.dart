@@ -1,6 +1,7 @@
 import 'package:chat_app/router/routes.dart';
 import 'package:chat_app/view/widget/message_tile.dart';
 import 'package:chat_app/view_model/chat_room_page_view_model.dart';
+import 'package:chat_app/view_model/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

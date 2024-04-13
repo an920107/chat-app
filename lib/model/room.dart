@@ -12,6 +12,7 @@ class Room {
   DateTime updatedTime;
 
   List<Message> unread = [];
+  Message? lastMessage;
 
   Room({
     required this.id,
