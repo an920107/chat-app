@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'chat-app-1f1e6',
     storageBucket: 'chat-app-1f1e6.appspot.com',
   );
+
 }

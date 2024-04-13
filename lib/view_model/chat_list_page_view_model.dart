@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:chat_app/model/room.dart';
-import 'package:chat_app/repo/room_local_repo.dart';
+import 'package:chat_app/repo/local/room_local_repo.dart';
 import 'package:chat_app/service/message_service.dart';
 import 'package:flutter/material.dart';
 
