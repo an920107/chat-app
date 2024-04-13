@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:chat_app/model/user.dart';
 import 'package:chat_app/repo/local/user_local_repo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat_app/repo/remote/user_remote_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 
 class SignInPageViewModel with ChangeNotifier {
@@ -29,7 +31,14 @@ class SignInPageViewModel with ChangeNotifier {
         email: email,
         password: password,
       );
-      await UserLocalRepo.createUser(credential.user!.uid, name);
+      final user = User(
+        id: credential.user!.uid,
+        name: name,
+        createdTime: DateTime.now().toUtc(),
+        updatedTime: DateTime.now().toUtc(),
+      );
+      await UserLocalRepo.createUser(user);
+      await UserRemoteRepo.createUser(user);
     } on FirebaseAuthException catch (e) {
       return "${e.code}: ${e.message}";
     }

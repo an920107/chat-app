@@ -12,17 +12,7 @@ abstract class UserLocalRepo {
     return User.fromJson(json.first);
   }
 
-  static Future<User> createUser(String id, String name) async {
-    final user = User(
-      id: id,
-      name: name,
-      createdTime: DateTime.now().toUtc(),
-      updatedTime: DateTime.now().toUtc(),
-    );
-    await LocalDatabase.instance.insert(
-      "user",
-      user.toJson(),
-    );
-    return user;
+  static Future<void> createUser(User user) async {
+    await LocalDatabase.instance.insert("user", user.toJson());
   }
 }
