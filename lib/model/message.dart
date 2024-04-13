@@ -24,4 +24,12 @@ class Message {
       updatedTime: DateTime.parse(json["updated_time"]),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "source_uid": sourceUid,
+    "content": content,
+    "created_time": createdTime.toIso8601String(),
+    "updated_time": updatedTime.toIso8601String(),
+  };
 }

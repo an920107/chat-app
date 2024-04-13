@@ -23,7 +23,7 @@ class ChatPreviewTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => context.push("${Routes.chat.path}/$roomId"),
-      /// TODO: user avatar
+      // TODO: user avatar
       leading: ClipOval(
         child: Container(
           color: Colors.grey,
@@ -50,7 +50,7 @@ class ChatPreviewTile extends StatelessWidget {
             ),
           ),
           Text(
-            " • ${DateFormat(DateFormat.HOUR24_MINUTE).format(lastTime)}",
+            " • ${DateFormat(DateFormat.HOUR24_MINUTE).format(lastTime.toLocal())}",
             style: unread > 0
                 ? const TextStyle(fontWeight: FontWeight.bold)
                 : null,

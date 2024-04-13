@@ -23,7 +23,7 @@ class MessageTile extends StatelessWidget {
             isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// TODO: user avatar
+          // TODO: user avatar
           if (!isMe)
             ClipOval(
               child: Container(
@@ -39,8 +39,7 @@ class MessageTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (isMe)
-                _buildSendTime(),
+              if (isMe) _buildSendTime(),
               ConstrainedBox(
                 constraints: const BoxConstraints(
                   minHeight: 36,
@@ -71,8 +70,7 @@ class MessageTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (!isMe)
-                _buildSendTime(),
+              if (!isMe) _buildSendTime(),
             ],
           ),
         ],
@@ -87,7 +85,7 @@ class MessageTile extends StatelessWidget {
         right: isMe ? 10 : 0,
       ),
       child: Text(
-        DateFormat(DateFormat.HOUR24_MINUTE).format(sendTime),
+        DateFormat(DateFormat.HOUR24_MINUTE).format(sendTime.toLocal()),
         style: const TextStyle(color: Colors.grey, fontSize: 12),
       ),
     );

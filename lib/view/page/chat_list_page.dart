@@ -1,5 +1,6 @@
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
 import 'package:chat_app/view_model/chat_list_page_view_model.dart';
+import 'package:chat_app/view_model/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,15 +31,19 @@ class _ChatListPageState extends State<ChatListPage> {
       ),
       body: Consumer<ChatListPageViewModel>(
         builder: (context, value, child) => ListView(
-          children: value.rooms
-              .map((room) => ChatPreviewTile(
-                    roomId: room.id,
-                    name: room.name,
-                    lastMessage: room.messageIds.lastOrNull ?? "No message...",
-                    lastTime: room.updatedTime,
-                    unread: room.unread.length,
-                  ))
-              .toList(),
+          children: value.rooms.map((room) {
+            final lastMessageFuture = room.messageIds.lastOrNull?.toMessage();
+            return FutureBuilder(
+              future: lastMessageFuture,
+              builder: (context, snapshot) => ChatPreviewTile(
+                roomId: room.id,
+                name: room.name,
+                lastMessage: snapshot.data?.content ?? "<No message>",
+                lastTime: room.updatedTime,
+                unread: room.unread.length,
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

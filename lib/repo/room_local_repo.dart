@@ -1,3 +1,5 @@
+import 'dart:convert' as convert;
+
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/service/local_database.dart';
 
@@ -18,5 +20,17 @@ abstract class RoomLocalRepo {
     );
     if (json.isEmpty) return null;
     return Room.fromJson(json.first);
+  }
+
+  static Future<void> patchMessage(String roomId, List<String> messageIds) async {
+    await LocalDatabase.instance.update(
+      "room",
+      {
+        "messages": convert.json.encode(messageIds),
+        "updated_time": DateTime.now().toUtc().toIso8601String(),
+      },
+      where: "id = ?",
+      whereArgs: [roomId],
+    );
   }
 }
