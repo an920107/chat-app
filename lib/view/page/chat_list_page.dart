@@ -26,6 +26,7 @@ class _ChatListPageState extends State<ChatListPage> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
+        // TODO: preference
         leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
         title: const Text("Let's Chat"),
       ),
