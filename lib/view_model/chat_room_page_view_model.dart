@@ -1,6 +1,7 @@
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/repo/message_local_repo.dart';
 import 'package:chat_app/repo/room_local_repo.dart';
+import 'package:chat_app/service/message_service.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoomPageViewModel with ChangeNotifier {
@@ -30,6 +31,7 @@ class ChatRoomPageViewModel with ChangeNotifier {
         "6b38a418-5ada-4c69-8cac-6354d74b4811", content);
     _room.messageIds.add(message.id);
     await RoomLocalRepo.patchMessage(_room.id, _room.messageIds);
+    MessageService.addMessage(message);
     notifyListeners();
   }
 }
