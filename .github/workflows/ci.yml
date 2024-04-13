@@ -10,7 +10,7 @@ on:
     tags:
       - v*
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -21,8 +21,23 @@ jobs:
           channel: stable
       - name: Resolve Flutter dependency
         run: flutter pub get
-      - name: Analyze and build
-        run: flutter analyze && flutter build apk --release
+      - name: Run flutter analyse
+        run: flutter analyze
+  build:
+    if: ${{ github.ref_type == 'tag' }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Resolve Flutter dependency
+        run: flutter pub get
+      - name: Build release apk
+        run: flutter build apk --release
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
