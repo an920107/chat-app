@@ -23,13 +23,23 @@ class ChatRoomPageViewModel with ChangeNotifier {
     });
     notifyListeners();
   }
+
+  Future<void> sendMessage(String content) async {
+    if (_room.id.isEmpty) throw Exception("Room not found");
+    // TODO: user id
+    final message = await MessageLocalRepo.createMessage(
+        "6b38a418-5ada-4c69-8cac-6354d74b4811", content);
+    _room.messageIds.add(message.id);
+    await RoomLocalRepo.patchMessage(_room.id, _room.messageIds);
+    notifyListeners();
+  }
 }
 
 extension IdToMessage on String {
   Future<Message> toMessage() async {
     final message = await MessageLocalRepo.getMessage(this);
     if (message == null) throw Exception("Message not found");
-    /// TODO: user id
+    // TODO: user id
     message.isMe = message.sourceUid == "6b38a418-5ada-4c69-8cac-6354d74b4811";
     return message;
   }

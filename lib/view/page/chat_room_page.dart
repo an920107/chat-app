@@ -18,6 +18,9 @@ class ChatRoomPage extends StatefulWidget {
 }
 
 class _ChatRoomPageState extends State<ChatRoomPage> {
+  final _textController = TextEditingController();
+  final _textFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +82,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      controller: _textController,
+                      focusNode: _textFocusNode,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 10,
@@ -93,7 +98,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await context
+                          .read<ChatRoomPageViewModel>()
+                          .sendMessage(_textController.text);
+                      _textController.clear();
+                      if (context.mounted) {
+                        FocusScope.of(context).requestFocus(_textFocusNode);
+                      }
+                    },
                     icon: const Icon(Icons.send),
                   ),
                 ],
