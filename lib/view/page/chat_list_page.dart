@@ -1,3 +1,4 @@
+import 'package:chat_app/model/message.dart';
 import 'package:chat_app/router/routes.dart';
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
 import 'package:chat_app/view/widget/user_search_dialog.dart';
@@ -99,12 +100,20 @@ class _ChatListPageState extends State<ChatListPage> {
       body: Consumer<ChatListPageViewModel>(
         builder: (context, value, child) => ListView(
           children: value.rooms.map((room) {
+            String? name;
+            Message? message;
+            final nameFuture = room.name;
+            final messageFuture =
+                room.messageIds.lastOrNull?.toMessage() ?? Future.value(null);
             return FutureBuilder(
-              future: room.name,
+              future: Future.wait([
+                nameFuture.then((value) => name = value),
+                messageFuture.then((value) => message = value),
+              ]),
               builder: (context, snapshot) => ChatPreviewTile(
                 roomId: room.id,
-                name: snapshot.data ?? "",
-                lastMessage: "<No message>",
+                name: name ?? "",
+                lastMessage: message?.content ?? "<No Message>",
                 lastTime: room.updatedTime,
                 unread: room.unread.length,
               ),

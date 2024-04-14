@@ -26,7 +26,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // _scrollController.jumpTo(double.infinity);
       context.read<ChatRoomPageViewModel>().fetch(widget.id);
     });
   }
@@ -54,30 +53,34 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           children: [
             Expanded(
               child: Consumer<ChatRoomPageViewModel>(
-                builder: (context, value, child) => ListView.builder(
-                  reverse: true,
-                  itemCount: value.room.messageIds.length,
-                  itemBuilder: (context, index) {
-                    final messageFuture = value.room.messageIds.reversed
-                        .toList()[index]
-                        .toMessage();
-                    return FutureBuilder(
-                      future: messageFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done ||
-                            !snapshot.hasData) {
-                          return const SizedBox();
-                        }
-                        final message = snapshot.data!;
-                        return MessageTile(
-                          content: message.content,
-                          sendTime: message.updatedTime,
-                          isMe: message.isMe,
-                        );
-                      },
-                    );
-                  },
-                ),
+                builder: (context, value, child) {
+                  final reversedMessageIds =
+                      value.room.messageIds.reversed.toList();
+                  return ListView.builder(
+                    reverse: true,
+                    itemCount: value.room.messageIds.length,
+                    itemBuilder: (context, index) {
+                      final messageFuture =
+                          reversedMessageIds.toList()[index].toMessage();
+                      return FutureBuilder(
+                        future: messageFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState !=
+                                  ConnectionState.done ||
+                              !snapshot.hasData) {
+                            return const SizedBox();
+                          }
+                          final message = snapshot.data!;
+                          return MessageTile(
+                            content: message.content,
+                            sendTime: message.updatedTime,
+                            isMe: message.isMe,
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               ),
             ),
             Padding(

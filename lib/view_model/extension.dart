@@ -1,15 +1,14 @@
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/room.dart';
-import 'package:chat_app/repo/local/message_local_repo.dart';
+import 'package:chat_app/repo/remote/message_remote_repo.dart';
 import 'package:chat_app/repo/remote/user_remote_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 extension IdToMessage on String {
-  Future<Message> toMessage() async {
-    final message = await MessageLocalRepo.getMessage(this);
-    if (message == null) throw Exception("Message not found");
-    // TODO: user id
-    message.isMe = message.sourceUid == "6b38a418-5ada-4c69-8cac-6354d74b4811";
+  Future<Message?> toMessage() async {
+    final message = await MessageRemoteRepo.getMessage(this);
+    if (message == null) return null;
+    message.isMe = message.sourceUid == FirebaseAuth.instance.currentUser!.uid;
     return message;
   }
 }

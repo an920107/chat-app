@@ -29,4 +29,16 @@ abstract class RoomRemoteRepo {
     final yRooms = ySnapshot.docs.map((e) => Room.fromJson(e.data()));
     return xRooms.where((x) => yRooms.any((y) => x.id == y.id)).firstOrNull;
   }
+
+  static Future<void> patchMessage(
+    String roomId,
+    List<String> messageIds,
+  ) async {
+    await _db.doc(roomId).update(
+      {
+        "messages": messageIds,
+        "updated_time": DateTime.now().toUtc().toIso8601String(),
+      },
+    );
+  }
 }

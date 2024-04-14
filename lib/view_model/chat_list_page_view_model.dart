@@ -29,8 +29,9 @@ class ChatListPageViewModel with ChangeNotifier {
   Future<void> fetch() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return;
-    _rooms = await RoomRemoteRepo.getRooms(firebaseUser.uid);
     _user = await UserRemoteRepo.getUser(firebaseUser.uid);
+    _rooms = await RoomRemoteRepo.getRooms(firebaseUser.uid);
+    _rooms.sort((a, b) => b.updatedTime.compareTo(a.updatedTime));
     notifyListeners();
   }
 
