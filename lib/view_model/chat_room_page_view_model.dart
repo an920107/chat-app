@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 class ChatRoomPageViewModel with ChangeNotifier {
   Room _room = Room(
     id: "",
-    name: "Loading...",
     userIds: [],
     messageIds: [],
-    isStatic: true,
     createdTime: DateTime.fromMillisecondsSinceEpoch(0),
     updatedTime: DateTime.fromMillisecondsSinceEpoch(0),
   );

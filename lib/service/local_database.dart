@@ -25,9 +25,8 @@ abstract class LocalDatabase {
         db.execute('''CREATE TABLE "room" (
           "id"	TEXT NOT NULL UNIQUE,
           "name"	TEXT NOT NULL,
-          "users"	TEXT NOT NULL DEFAULT [] CHECK("users" LIKE '[%]'),
-          "messages"	TEXT NOT NULL DEFAULT [] CHECK("messages" LIKE '[%]'),
-          "is_static"	INTEGER NOT NULL,
+          "users"	TEXT NOT NULL DEFAULT [],
+          "messages"	TEXT NOT NULL DEFAULT [],
           "created_time"	TEXT NOT NULL,
           "updated_time"	TEXT,
           PRIMARY KEY("id")
@@ -35,6 +34,7 @@ abstract class LocalDatabase {
         db.execute('''CREATE TABLE "user" (
           "id"	TEXT NOT NULL UNIQUE,
           "name"	TEXT NOT NULL,
+          "email"	TEXT NOT NULL,
           "created_time"	TEXT NOT NULL,
           "updated_time"	TEXT NOT NULL,
           PRIMARY KEY("id")

@@ -7,4 +7,10 @@ abstract class UserRemoteRepo {
   static Future<void> createUser(User user) async {
     await _db.doc(user.id).set(user.toJson());
   }
+
+  static Future<User?> searchUser(String email) async {
+    final snapshot = await _db.where("email", isEqualTo: email).get();
+    if (snapshot.docs.isEmpty) return null;
+    return User.fromJson(snapshot.docs.first.data());
+  }
 }

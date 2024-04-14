@@ -34,6 +34,7 @@ class SignInPageViewModel with ChangeNotifier {
       final user = User(
         id: credential.user!.uid,
         name: name,
+        email: credential.user!.email!,
         createdTime: DateTime.now().toUtc(),
         updatedTime: DateTime.now().toUtc(),
       );
@@ -42,6 +43,7 @@ class SignInPageViewModel with ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       return "${e.code}: ${e.message}";
     }
+    _type = SignInPageContentType.signIn;
     return null;
   }
 

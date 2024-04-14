@@ -1,4 +1,5 @@
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
+import 'package:chat_app/view/widget/user_search_dialog.dart';
 import 'package:chat_app/view_model/chat_list_page_view_model.dart';
 import 'package:chat_app/view_model/extension.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,34 @@ class _ChatListPageState extends State<ChatListPage> {
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         // TODO: preference
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: const Icon(Icons.menu),
+          ),
+        ),
         title: const Text("Let's Chat"),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final email = await showDialog<String?>(
+                context: context,
+                builder: (context) => const UserSearchDialog(),
+              );
+              if (!context.mounted) return;
+              final errorMessage =
+                  await context.read<ChatListPageViewModel>().addFriend(email);
+              if (!context.mounted || errorMessage == null) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(errorMessage)),
+              );
+            },
+            icon: const Icon(Icons.person_add),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
+      drawer: const Drawer(),
       body: Consumer<ChatListPageViewModel>(
         builder: (context, value, child) => ListView(
           children: value.rooms.map((room) {
@@ -38,7 +64,7 @@ class _ChatListPageState extends State<ChatListPage> {
               future: lastMessageFuture,
               builder: (context, snapshot) => ChatPreviewTile(
                 roomId: room.id,
-                name: room.name,
+                name: "<User Name>",
                 lastMessage: snapshot.data?.content ?? "<No message>",
                 lastTime: room.updatedTime,
                 unread: room.unread.length,

@@ -139,10 +139,11 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         TextButton(
                           style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              foregroundColor: Colors.grey),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            foregroundColor: Colors.grey,
+                          ),
                           onPressed: value.changeType,
                           child: Text(
                             value.type == SignInPageContentType.signIn
@@ -154,14 +155,17 @@ class _SignInPageState extends State<SignInPage> {
                         const SizedBox(width: 12),
                         FilledButton(
                           style: FilledButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              backgroundColor: Colors.grey.shade800),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: Colors.grey.shade800,
+                          ),
                           onPressed: _signInOrCreateAccount,
-                          child: Text(value.type == SignInPageContentType.signIn
-                              ? "Sign In"
-                              : "Create Account"),
+                          child: Text(
+                            value.type == SignInPageContentType.signIn
+                                ? "Sign In"
+                                : "Create Account",
+                          ),
                         ),
                       ],
                     ),

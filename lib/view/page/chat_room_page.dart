@@ -42,7 +42,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               context.canPop() ? context.pop() : context.go(Routes.chat.path),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: Text(context.watch<ChatRoomPageViewModel>().room.name),
+        // title: Text(context.watch<ChatRoomPageViewModel>().room.name),
+        title: const Text("<User Name>"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
