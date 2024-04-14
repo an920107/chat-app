@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 
 class SignInPageViewModel with ChangeNotifier {
+  bool get isSignedIn => FirebaseAuth.instance.currentUser != null;
+
   SignInPageContentType _type = SignInPageContentType.signIn;
   SignInPageContentType get type => _type;
   set type(SignInPageContentType value) {

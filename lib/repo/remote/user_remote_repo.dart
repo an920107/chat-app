@@ -4,6 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 abstract class UserRemoteRepo {
   static final _db = FirebaseFirestore.instance.collection("user");
 
+  static Future<User?> getUser(String id) async {
+    final snapshot = await _db.doc(id).get();
+    if (!snapshot.exists) return null;
+    return User.fromJson(snapshot.data()!);
+  }
+
   static Future<void> createUser(User user) async {
     await _db.doc(user.id).set(user.toJson());
   }

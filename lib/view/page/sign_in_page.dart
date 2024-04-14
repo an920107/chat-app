@@ -18,6 +18,16 @@ class _SignInPageState extends State<SignInPage> {
   final _nameTextController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.read<SignInPageViewModel>().isSignedIn) {
+        context.pushReplacement(Routes.chat.path);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(

@@ -2,16 +2,21 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:chat_app/model/room.dart';
+import 'package:chat_app/model/user.dart';
 import 'package:chat_app/repo/remote/room_remote_repo.dart';
 import 'package:chat_app/repo/remote/user_remote_repo.dart';
 import 'package:chat_app/service/message_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatListPageViewModel with ChangeNotifier {
   List<Room> _rooms = [];
   List<Room> get rooms => UnmodifiableListView(_rooms);
+
+  User? _user;
+  String get name => _user?.name ?? "";
+  String get email => _user?.email ?? "";
 
   ChatListPageViewModel() {
     MessageService.stream.listen((event) {
@@ -25,7 +30,12 @@ class ChatListPageViewModel with ChangeNotifier {
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return;
     _rooms = await RoomRemoteRepo.getRooms(firebaseUser.uid);
+    _user = await UserRemoteRepo.getUser(firebaseUser.uid);
     notifyListeners();
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   /// Search and add a friend with the given email.
@@ -55,6 +65,7 @@ class ChatListPageViewModel with ChangeNotifier {
     );
     await RoomRemoteRepo.createRoom(room);
 
+    await fetch();
     return null;
   }
 }
