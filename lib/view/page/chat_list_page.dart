@@ -44,7 +44,7 @@ class _ChatListPageState extends State<ChatListPage> {
                 context: context,
                 builder: (context) => const UserSearchDialog(),
               );
-              if (!context.mounted) return;
+              if (!context.mounted || email == null) return;
               final errorMessage =
                   await context.read<ChatListPageViewModel>().addFriend(email);
               if (!context.mounted || errorMessage == null) return;
