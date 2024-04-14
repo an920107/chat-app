@@ -5,10 +5,14 @@ abstract class UserLocalRepo {
   static Future<User?> getUser(String id) async {
     final json = await LocalDatabase.instance.query(
       "user",
-      where: "id =?",
+      where: "id = ?",
       whereArgs: [id],
     );
     if (json.isEmpty) return null;
     return User.fromJson(json.first);
+  }
+
+  static Future<void> createUser(User user) async {
+    await LocalDatabase.instance.insert("user", user.toJson());
   }
 }

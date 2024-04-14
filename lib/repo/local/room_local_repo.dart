@@ -4,12 +4,15 @@ import 'package:chat_app/model/room.dart';
 import 'package:chat_app/service/local_database.dart';
 
 abstract class RoomLocalRepo {
-  static Future<List<Room>> getRooms() async {
+  static Future<List<Room>> getRooms(String userId) async {
     final json = await LocalDatabase.instance.query(
       "room",
       orderBy: "updated_time DESC",
     );
-    return json.map((e) => Room.fromJson(e)).toList();
+    return json
+        .map((e) => Room.fromJson(e))
+        .where((e) => e.userIds.contains(userId))
+        .toList();
   }
 
   static Future<Room?> getRoom(String id) async {
@@ -22,7 +25,8 @@ abstract class RoomLocalRepo {
     return Room.fromJson(json.first);
   }
 
-  static Future<void> patchMessage(String roomId, List<String> messageIds) async {
+  static Future<void> patchMessage(
+      String roomId, List<String> messageIds) async {
     await LocalDatabase.instance.update(
       "room",
       {
@@ -32,5 +36,9 @@ abstract class RoomLocalRepo {
       where: "id = ?",
       whereArgs: [roomId],
     );
+  }
+
+  static Future<void> createRoom(Room room) async {
+    await LocalDatabase.instance.insert("room", room.toJson());
   }
 }

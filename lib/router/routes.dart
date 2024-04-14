@@ -1,5 +1,6 @@
 enum Routes {
   root("/"),
+  signIn("/signIn"),
   chat("/chat"),
   preferance("/preference");
 
