@@ -9,6 +9,12 @@ abstract class RoomRemoteRepo {
     return snapshot.docs.map((e) => Room.fromJson(e.data())).toList();
   }
 
+  static Future<Room?> getRoom(String roomId) async {
+    final snapshot = await _db.doc(roomId).get();
+    if (!snapshot.exists) return null;
+    return Room.fromJson(snapshot.data()!);
+  }
+
   static Future<void> createRoom(Room room) async {
     await _db.doc(room.id).set(room.toJson());
   }

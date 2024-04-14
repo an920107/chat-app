@@ -1,6 +1,7 @@
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/repo/local/message_local_repo.dart';
 import 'package:chat_app/repo/local/room_local_repo.dart';
+import 'package:chat_app/repo/remote/room_remote_repo.dart';
 import 'package:chat_app/service/message_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class ChatRoomPageViewModel with ChangeNotifier {
   Room get room => _room;
 
   Future<void> fetch(String id) async {
-    await RoomLocalRepo.getRoom(id).then((value) {
+    await RoomRemoteRepo.getRoom(id).then((value) {
       if (value == null) throw Exception("Room not found");
       _room = value;
     });
