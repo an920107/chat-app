@@ -45,7 +45,9 @@ abstract class LocalDatabase {
 
   Future<void> clearData() async {
     await _instance.close();
-    await deleteDatabase(join(await getDatabasesPath(), _dbName));
+    await deleteDatabase(
+      join(await getDatabasesPath(), _dbName),
+    );
     await SystemNavigator.pop();
   }
 }

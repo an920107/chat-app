@@ -6,8 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 extension IdToMessage on String {
   Future<Message?> toMessage() async {
-    final message = await MessageRemoteRepo().getMessage(this);
-    if (message == null) return null;
+    var message = await MessageLocalRepo().getMessage(this);
+    if (message == null) {
+      message = await MessageRemoteRepo().getMessage(this);
+      if (message == null) return null;
+      await MessageLocalRepo().createMessage(message);
+    }
     message.isMe = message.sourceUid == FirebaseAuth.instance.currentUser!.uid;
     return message;
   }
@@ -18,8 +22,12 @@ extension ResolveRoomName on Room {
     if (userIds.isEmpty) return "";
     final otherSideId =
         userIds.firstWhere((e) => e != FirebaseAuth.instance.currentUser!.uid);
-    final otherSideUser = await UserRemoteRepo().getUser(otherSideId);
-    if (otherSideUser == null) return "";
+    var otherSideUser = await UserLocalRepo().getUser(otherSideId);
+    if (otherSideUser == null) {
+      otherSideUser = await UserRemoteRepo().getUser(otherSideId);
+      if (otherSideUser == null) return "";
+      await UserLocalRepo().createUser(otherSideUser);
+    }
     return otherSideUser.name;
   }
 }

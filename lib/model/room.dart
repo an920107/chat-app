@@ -27,10 +27,14 @@ class Room {
       Room(
         id: json["id"],
         userIds: isSql
-            ? convert.json.decode(json["users"])
+            ? (convert.json.decode(json["users"]) as List)
+                .map((e) => e.toString())
+                .toList()
             : (json["users"] as List).map((e) => e.toString()).toList(),
         messageIds: isSql
-            ? convert.json.decode(json["messages"])
+            ? (convert.json.decode(json["messages"]) as List)
+                .map((e) => e.toString())
+                .toList()
             : (json["messages"] as List).map((e) => e.toString()).toList(),
         createdTime: DateTime.parse(json["created_time"]),
         updatedTime: DateTime.parse(json["updated_time"]),

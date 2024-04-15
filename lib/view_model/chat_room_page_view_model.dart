@@ -18,11 +18,24 @@ class ChatRoomPageViewModel with ChangeNotifier {
   Room get room => _room;
 
   Future<void> fetch(String id) async {
-    await RoomRemoteRepo().getRoom(id).then((value) {
-      if (value == null) throw Exception("Room not found");
-      _room = value;
+    final localRoom = await RoomLocalRepo().getRoom(id);
+    if (localRoom != null) {
+      _room = localRoom;
+      notifyListeners();
+    }
+
+    await RoomRemoteRepo().getRoom(id).then((remoteRoom) async {
+      if (remoteRoom == null) throw Exception("Room not found");
+      if (localRoom == null) {
+        _room = remoteRoom;
+        await RoomLocalRepo().createRoom(remoteRoom);
+        notifyListeners();
+      } else if (remoteRoom.updatedTime.compareTo(_room.updatedTime) > 0) {
+        _room = remoteRoom;
+        await RoomLocalRepo().updateRoom(remoteRoom);
+        notifyListeners();
+      }
     });
-    notifyListeners();
   }
 
   Future<void> sendMessage(String content) async {
