@@ -34,6 +34,7 @@ class ChatRoomPageViewModel with ChangeNotifier {
       createdTime: DateTime.now().toUtc(),
       updatedTime: DateTime.now().toUtc(),
     );
+    await fetch(_room.id);
     _room.messageIds.add(message.id);
     await MessageRemoteRepo().createMessage(message);
     await RoomRemoteRepo().patchMessage(_room.id, _room.messageIds);
