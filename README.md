@@ -26,8 +26,10 @@ A simple chat app for the assignment of Line intern.
 
 - There is a workflow (CI) set up for this repository.
 
-  - When a **pull requests opened**, it will run `flutter analyse` to check the basic coding rules.
+  - When a **pull requests opened**, it will run `flutter analyse` to check the basic coding rules and `flutter test` to run the tests.
 
   - When a **tag pushed**, it will run checks mentioned before, and then build the apk file and release it.
+
+- There are several unit tests and widget tests for this repository.
 
 - The design pattern is **MVVM**.
