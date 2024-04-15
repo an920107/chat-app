@@ -24,7 +24,9 @@ jobs:
       - name: Run flutter analyse
         run: flutter analyze
       - name: Run flutter test
-        run: flutter test
+        run: |
+          dart run build_runner build
+          flutter test
   build:
     if: ${{ github.ref_type == 'tag' }}
     needs: test
