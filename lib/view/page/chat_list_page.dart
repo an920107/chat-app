@@ -3,7 +3,7 @@ import 'package:chat_app/router/routes.dart';
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
 import 'package:chat_app/view/widget/user_search_dialog.dart';
 import 'package:chat_app/view_model/chat_list_page_view_model.dart';
-import 'package:chat_app/view_model/extension.dart';
+import 'package:chat_app/view_model/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -102,9 +102,9 @@ class _ChatListPageState extends State<ChatListPage> {
           children: value.rooms.map((room) {
             String? name;
             Message? message;
-            final nameFuture = room.name;
+            final nameFuture = Utils().getRoomName(room);
             final messageFuture =
-                room.messageIds.lastOrNull?.toMessage() ?? Future.value(null);
+                Utils().getMessage(room.messageIds.lastOrNull);
             return FutureBuilder(
               future: Future.wait([
                 nameFuture.then((value) => name = value),

@@ -20,7 +20,9 @@ jobs:
         with:
           channel: stable
       - name: Resolve Flutter dependency
-        run: flutter pub get
+        run: |
+          flutter pub get
+          dart run build_runner build
       - name: Run flutter analyse
         run: flutter analyze
       - name: Run flutter test
