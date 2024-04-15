@@ -1,7 +1,7 @@
 import 'package:chat_app/router/routes.dart';
 import 'package:chat_app/view/widget/message_tile.dart';
 import 'package:chat_app/view_model/chat_room_page_view_model.dart';
-import 'package:chat_app/view_model/extension.dart';
+import 'package:chat_app/view_model/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +42,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           icon: const Icon(Icons.arrow_back),
         ),
         title: FutureBuilder(
-          future: context.watch<ChatRoomPageViewModel>().room.name,
+          future:
+              Utils().getRoomName(context.watch<ChatRoomPageViewModel>().room),
           builder: (context, snapshot) => Text(snapshot.data ?? ""),
         ),
       ),
@@ -60,8 +61,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     reverse: true,
                     itemCount: value.room.messageIds.length,
                     itemBuilder: (context, index) {
-                      final messageFuture =
-                          reversedMessageIds.toList()[index].toMessage();
+                      final messageFuture = Utils()
+                          .getMessage(reversedMessageIds.toList()[index]);
                       return FutureBuilder(
                         future: messageFuture,
                         builder: (context, snapshot) {
