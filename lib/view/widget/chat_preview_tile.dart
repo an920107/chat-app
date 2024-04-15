@@ -41,7 +41,7 @@ class ChatPreviewTile extends StatelessWidget {
         children: [
           Flexible(
             child: Text(
-              lastMessage,
+              lastMessage.replaceAll("\n", " "),
               softWrap: false,
               overflow: TextOverflow.fade,
               style: unread > 0
