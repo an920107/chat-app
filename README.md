@@ -18,6 +18,10 @@ A simple chat app for the assignment of Line intern.
 
   - Chat history can be restored at any device.
 
+- Offline chat history.
+
+  - Because the data is also stored in local database, the user can still access the chat history although there is no network.
+
 ## Development
 
 - There is a workflow (CI) set up for this repository.
