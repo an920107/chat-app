@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:chat_app/model/user.dart';
 import 'package:chat_app/repo/local/user_local_repo.dart';
-import 'package:chat_app/repo/remote/user_remote_repo.dart';
+import 'package:chat_app/repo/user_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 
@@ -41,7 +41,7 @@ class SignInPageViewModel with ChangeNotifier {
         updatedTime: DateTime.now().toUtc(),
       );
       await UserLocalRepo.createUser(user);
-      await UserRemoteRepo.createUser(user);
+      await UserRemoteRepo().createUser(user);
     } on FirebaseAuthException catch (e) {
       return "${e.code}: ${e.message}";
     }

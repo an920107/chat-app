@@ -24,7 +24,6 @@ abstract class LocalDatabase {
         )''');
         db.execute('''CREATE TABLE "room" (
           "id"	TEXT NOT NULL UNIQUE,
-          "name"	TEXT NOT NULL,
           "users"	TEXT NOT NULL DEFAULT [],
           "messages"	TEXT NOT NULL DEFAULT [],
           "created_time"	TEXT NOT NULL,

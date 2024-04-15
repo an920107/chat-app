@@ -3,8 +3,8 @@ import 'dart:collection';
 
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/model/user.dart';
-import 'package:chat_app/repo/remote/room_remote_repo.dart';
-import 'package:chat_app/repo/remote/user_remote_repo.dart';
+import 'package:chat_app/repo/room_repo.dart';
+import 'package:chat_app/repo/user_repo.dart';
 import 'package:chat_app/service/message_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
@@ -29,8 +29,8 @@ class ChatListPageViewModel with ChangeNotifier {
   Future<void> fetch() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return;
-    _user = await UserRemoteRepo.getUser(firebaseUser.uid);
-    _rooms = await RoomRemoteRepo.getRooms(firebaseUser.uid);
+    _user = await UserRemoteRepo().getUser(firebaseUser.uid);
+    _rooms = await RoomRemoteRepo().getRooms(firebaseUser.uid);
     _rooms.sort((a, b) => b.updatedTime.compareTo(a.updatedTime));
     notifyListeners();
   }
@@ -49,9 +49,9 @@ class ChatListPageViewModel with ChangeNotifier {
     if (email! == FirebaseAuth.instance.currentUser!.email) {
       return "You can't add yourself as a friend.";
     }
-    final friend = await UserRemoteRepo.searchUser(email);
+    final friend = await UserRemoteRepo().searchUser(email);
     if (friend == null) return "User not found.";
-    var room = await RoomRemoteRepo.queryRoom(
+    var room = await RoomRemoteRepo().queryRoom(
         FirebaseAuth.instance.currentUser!.uid, friend.id);
     if (room != null) {
       return "You already have a friend with this user.";
@@ -64,7 +64,7 @@ class ChatListPageViewModel with ChangeNotifier {
       createdTime: DateTime.now().toUtc(),
       updatedTime: DateTime.now().toUtc(),
     );
-    await RoomRemoteRepo.createRoom(room);
+    await RoomRemoteRepo().createRoom(room);
 
     await fetch();
     return null;
