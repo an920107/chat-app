@@ -7,29 +7,50 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Utils {
   static final Utils _instance = Utils._internal();
   factory Utils() => _instance;
-  Utils._internal();
+
+  late FirebaseAuth firebaseAuth;
+  late MessageLocalRepo messageLocalRepo;
+  late MessageRemoteRepo messageRemoteRepo;
+  late UserLocalRepo userLocalRepo;
+  late UserRemoteRepo userRemoteRepo;
+
+  Utils._internal() {
+    firebaseAuth = FirebaseAuth.instance;
+    messageLocalRepo = MessageLocalRepo();
+    messageRemoteRepo = MessageRemoteRepo();
+    userLocalRepo = UserLocalRepo();
+    userRemoteRepo = UserRemoteRepo();
+  }
+
+  Utils.from(
+    this.firebaseAuth,
+    this.messageLocalRepo,
+    this.messageRemoteRepo,
+    this.userLocalRepo,
+    this.userRemoteRepo,
+  );
 
   Future<Message?> getMessage(String? id) async {
     if (id == null) return null;
-    var message = await MessageLocalRepo().getMessage(id);
+    var message = await messageLocalRepo.getMessage(id);
     if (message == null) {
-      message = await MessageRemoteRepo().getMessage(id);
+      message = await messageRemoteRepo.getMessage(id);
       if (message == null) return null;
-      await MessageLocalRepo().createMessage(message);
+      await messageLocalRepo.createMessage(message);
     }
-    message.isMe = message.sourceUid == FirebaseAuth.instance.currentUser!.uid;
+    message.isMe = message.sourceUid == firebaseAuth.currentUser!.uid;
     return message;
   }
 
   Future<String> getRoomName(Room room) async {
     if (room.userIds.isEmpty) return "";
-    final otherSideId = room.userIds
-        .firstWhere((e) => e != FirebaseAuth.instance.currentUser!.uid);
-    var otherSideUser = await UserLocalRepo().getUser(otherSideId);
+    final otherSideId =
+        room.userIds.firstWhere((e) => e != firebaseAuth.currentUser!.uid);
+    var otherSideUser = await userLocalRepo.getUser(otherSideId);
     if (otherSideUser == null) {
-      otherSideUser = await UserRemoteRepo().getUser(otherSideId);
+      otherSideUser = await userRemoteRepo.getUser(otherSideId);
       if (otherSideUser == null) return "";
-      await UserLocalRepo().createUser(otherSideUser);
+      await userLocalRepo.createUser(otherSideUser);
     }
     return otherSideUser.name;
   }
