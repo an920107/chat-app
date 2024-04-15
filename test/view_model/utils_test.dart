@@ -1,6 +1,6 @@
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/room.dart';
-import 'package:chat_app/model/user.dart' as userModel;
+import 'package:chat_app/model/user.dart' as user_model;
 import 'package:chat_app/repo/message_repo.dart';
 import 'package:chat_app/repo/user_repo.dart';
 import 'package:chat_app/view_model/utils.dart';
@@ -121,7 +121,7 @@ Future<void> main() async {
 
   group("Get room name:", () {
     late Room room;
-    late userModel.User user;
+    late user_model.User user;
 
     setUp(() {
       room = Room(
@@ -132,7 +132,7 @@ Future<void> main() async {
         updatedTime: DateTime.now().toUtc(),
       );
 
-      user = userModel.User(
+      user = user_model.User(
         id: "uid1/2",
         name: "uid1/2",
         email: "email@example.com",
