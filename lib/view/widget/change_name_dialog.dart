@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
 
-class UserSearchDialog extends StatefulWidget {
-  const UserSearchDialog({super.key});
+class ChangeNameDialog extends StatefulWidget {
+  const ChangeNameDialog(
+    this.originName, {
+    super.key,
+  });
+
+  final String originName;
 
   @override
-  State<UserSearchDialog> createState() => _UserSearchDialogState();
+  State<ChangeNameDialog> createState() => _ChangeNameDialogState();
 }
 
-class _UserSearchDialogState extends State<UserSearchDialog> {
-  final _emailTextController = TextEditingController();
+class _ChangeNameDialogState extends State<ChangeNameDialog> {
+  final _nameTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameTextController.text = widget.originName;
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Add Friend"),
-      content: TextFormField(
-        controller: _emailTextController,
+      title: const Text("Change Name"),
+      content: TextField(
+        controller: _nameTextController,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          hintText: "Enter an email address",
+          hintText: "Enter your new name",
         ),
       ),
       actions: [
@@ -42,8 +53,8 @@ class _UserSearchDialogState extends State<UserSearchDialog> {
             ),
             backgroundColor: Colors.grey.shade800,
           ),
-          onPressed: () => Navigator.of(context).pop(_emailTextController.text),
-          child: const Text("Add"),
+          onPressed: () => Navigator.of(context).pop(_nameTextController.text),
+          child: const Text("Confirm"),
         ),
       ],
     );

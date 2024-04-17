@@ -78,6 +78,7 @@ class ChatListPageViewModel with ChangeNotifier {
   }
 
   /// Search and add a friend with the given email.
+  /// 
   /// If there is something going wrong, it will return
   /// the error message, otherwise it will return null.
   Future<String?> addFriend(String? email) async {
@@ -105,6 +106,25 @@ class ChatListPageViewModel with ChangeNotifier {
     await RoomRemoteRepo().createRoom(room);
 
     await fetch();
+    return null;
+  }
+
+  /// Change the user's display name.
+  /// 
+  /// If there is something going wrong, it will return
+  /// the error message, otherwise it will return null.
+  Future<String?> chaneName(String newName) async {
+    if (_user == null) return "Authentication error";
+    newName = newName.trim();
+    if (newName.isEmpty) return "Name shouldn't be empty";
+    if (newName == _user?.name) "Name haven't changed";
+    _user = await UserRemoteRepo().getUser(_user!.id);
+    if (_user == null) return "Authentication error";
+    _user!.name = newName;
+    _user!.updatedTime = DateTime.now().toUtc();
+    await UserRemoteRepo().updateUser(_user!);
+    await UserLocalRepo().updateUser(_user!);
+    notifyListeners();
     return null;
   }
 }
