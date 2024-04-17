@@ -1,5 +1,6 @@
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/router/routes.dart';
+import 'package:chat_app/view/widget/change_name_dialog.dart';
 import 'package:chat_app/view/widget/chat_preview_tile.dart';
 import 'package:chat_app/view/widget/user_search_dialog.dart';
 import 'package:chat_app/view_model/chat_list_page_view_model.dart';
@@ -84,10 +85,28 @@ class _ChatListPageState extends State<ChatListPage> {
                   children: [
                     ListTile(
                       onTap: () async {
+                        final name = await showDialog(
+                          context: context,
+                          builder: (context) => ChangeNameDialog(value.name),
+                        );
+                        if (!context.mounted || name == null) return;
+                        final errorMessage = await value.chaneName(name);
+                        if (!context.mounted || errorMessage == null) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(errorMessage)),
+                        );
+                      },
+                      leading: const Icon(Icons.person),
+                      title: const Text("Change Name"),
+                    ),
+                    const Divider(),
+                    ListTile(
+                      onTap: () async {
                         await value.signOut();
                         if (!context.mounted) return;
                         context.pushReplacement(Routes.root.path);
                       },
+                      leading: const Icon(Icons.logout),
                       title: const Text("Sign Out"),
                     ),
                   ],
