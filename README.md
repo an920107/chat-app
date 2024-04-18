@@ -1,8 +1,36 @@
-# Chat APP
+# Let's Chat
+
+![GitHub License](https://img.shields.io/github/license/an920107/chat-app) ![GitHub Release](https://img.shields.io/github/v/release/an920107/chat-app?color=green)
+
+![Flutter](https://img.shields.io/badge/Developed%20with%20Flutter-blue?logo=flutter&style=for-the-badge)
+
+![Logo](images/logo_w225.png)
 
 ## Description
 
 A simple chat app for the assignment of Line intern.
+
+## Preview
+
+### Sign In and Registration
+
+![Sign In Page](images/screenshot_sign_in_w300.jpg) ![Registration Page](images/screenshot_registration_w300.jpg)
+
+### Chat Room List
+
+![Room List Page](images/screenshot_room_list_w300.jpg)
+
+### Chat Room
+
+![Chat Room](images/screenshot_chat_room_w300.jpg)
+
+### Add Friend
+
+![Add Friend Dialog](images/screenshot_add_friend_w300.jpg)
+
+### Drawer
+
+![Drawer](images/screenshot_drawer_w300.jpg)
 
 ## Feature
 
@@ -24,7 +52,23 @@ A simple chat app for the assignment of Line intern.
 
 ## Development
 
+- After cloning the repository, you have to do the following steps first:
+
+  1. Resolve the flutter dependencies.
+     
+     ```
+     flutter pub get
+     ```
+
+  2. Build the testing dependencies.
+
+     ```
+     dart run build_runner build
+     ```
+
 - There is a workflow (CI) set up for this repository.
+
+  ![CI](images/screenshot_ci.png)
 
   - When a **pull requests opened**, it will run `flutter analyse` to check the basic coding rules and `flutter test` to run the tests.
 
