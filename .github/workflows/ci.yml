@@ -39,7 +39,7 @@ jobs:
         with:
           channel: stable
       - name: Set up environment
-        run: echo "${{ secrets.OPENAI_SECRET }}"
+        run: echo "${{ secrets.OPENAI_SECRET }}" >> .env
       - name: Resolve Flutter dependency
         run: flutter pub get
       - name: Build release apk
