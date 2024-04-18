@@ -50,6 +50,10 @@ A simple chat app for the assignment of Line intern.
 
   - Because the data is also stored in local database, the user can still access the chat history although there is no network.
 
+- Chat with OpenAI.
+
+  - A chat room with OpenAI will be created if it doesn't already exists.
+
 ## Development
 
 - After cloning the repository, you have to do the following steps first:
