@@ -55,14 +55,14 @@ A simple chat app for the assignment of Line intern.
 - After cloning the repository, you have to do the following steps first:
 
   1. Resolve the flutter dependencies.
-     
-     ```
+
+     ```bash
      flutter pub get
      ```
 
   2. Build the testing dependencies.
 
-     ```
+     ```bash
      dart run build_runner build
      ```
 
