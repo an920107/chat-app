@@ -54,4 +54,6 @@ class Utils {
     }
     return otherSideUser.name;
   }
+
+  bool isAiRoom(Room room) => room.userIds.contains("ai");
 }

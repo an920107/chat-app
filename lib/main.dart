@@ -8,11 +8,13 @@ import 'package:chat_app/view_model/chat_room_page_view_model.dart';
 import 'package:chat_app/view_model/sign_in_page_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart' hide Router;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalDatabase.initialize();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

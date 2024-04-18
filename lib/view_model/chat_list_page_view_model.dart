@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/model/user.dart';
+import 'package:chat_app/repo/message_repo.dart';
+import 'package:chat_app/repo/open_ai_repo.dart';
 import 'package:chat_app/repo/room_repo.dart';
 import 'package:chat_app/repo/user_repo.dart';
 import 'package:chat_app/service/message_service.dart';
+import 'package:chat_app/view_model/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -46,10 +50,11 @@ class ChatListPageViewModel with ChangeNotifier {
       }
     });
     final newRooms = <Room>[];
-    bool remoteRoomsError = false;
+    bool isRemoteRoomsError = false, isRemoteAiRoomExist = false;
     await RoomRemoteRepo().getRooms(uid).then((value) async {
-      remoteRoomsError = value.isEmpty;
+      isRemoteRoomsError = value.isEmpty;
       for (var remoteRoom in value) {
+        if (Utils().isAiRoom(remoteRoom)) isRemoteAiRoomExist = true;
         try {
           final localRoom = _rooms.firstWhere((e) => e.id == remoteRoom.id);
           if (remoteRoom.updatedTime.compareTo(localRoom.updatedTime) > 0) {
@@ -64,7 +69,15 @@ class ChatListPageViewModel with ChangeNotifier {
         }
       }
     });
-    if (!remoteRoomsError) {
+    if (!isRemoteAiRoomExist) {
+      final aiRoom = await createAiRoom();
+      if (aiRoom != null) {
+        newRooms.add(aiRoom);
+      } else {
+        isRemoteRoomsError = true;
+      }
+    }
+    if (!isRemoteRoomsError) {
       _rooms = List.from(newRooms);
       _rooms.sort((a, b) => b.updatedTime.compareTo(a.updatedTime));
       notifyListeners();
@@ -78,7 +91,7 @@ class ChatListPageViewModel with ChangeNotifier {
   }
 
   /// Search and add a friend with the given email.
-  /// 
+  ///
   /// If there is something going wrong, it will return
   /// the error message, otherwise it will return null.
   Future<String?> addFriend(String? email) async {
@@ -110,10 +123,10 @@ class ChatListPageViewModel with ChangeNotifier {
   }
 
   /// Change the user's display name.
-  /// 
+  ///
   /// If there is something going wrong, it will return
   /// the error message, otherwise it will return null.
-  Future<String?> chaneName(String newName) async {
+  Future<String?> changeName(String newName) async {
     if (_user == null) return "Authentication error";
     newName = newName.trim();
     if (newName.isEmpty) return "Name shouldn't be empty";
@@ -126,5 +139,32 @@ class ChatListPageViewModel with ChangeNotifier {
     await UserLocalRepo().updateUser(_user!);
     notifyListeners();
     return null;
+  }
+
+  Future<Room?> createAiRoom() async {
+    final aiReply = await OpenAiRepo().getReply("Hello!");
+    if (aiReply == null) return null;
+    
+    final aiRoom = Room(
+      id: const Uuid().v4(),
+      userIds: [FirebaseAuth.instance.currentUser!.uid, "ai"],
+      messageIds: [],
+      createdTime: DateTime.now().toUtc(),
+      updatedTime: DateTime.now().toUtc(),
+    );
+
+    final firstMessage = Message(
+      id: const Uuid().v4(),
+      sourceUid: "ai",
+      content: aiReply,
+      createdTime: DateTime.now().toUtc(),
+      updatedTime: DateTime.now().toUtc(),
+    );
+
+    await RoomRemoteRepo().createRoom(aiRoom);
+    await RoomLocalRepo().createRoom(aiRoom);
+    await MessageRemoteRepo().createMessage(firstMessage);
+    await RoomRemoteRepo().patchMessage(aiRoom.id, [firstMessage.id]);
+    return aiRoom;
   }
 }
