@@ -90,7 +90,7 @@ class _ChatListPageState extends State<ChatListPage> {
                           builder: (context) => ChangeNameDialog(value.name),
                         );
                         if (!context.mounted || name == null) return;
-                        final errorMessage = await value.chaneName(name);
+                        final errorMessage = await value.changeName(name);
                         if (!context.mounted || errorMessage == null) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(errorMessage)),

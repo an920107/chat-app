@@ -1,8 +1,10 @@
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/room.dart';
 import 'package:chat_app/repo/message_repo.dart';
+import 'package:chat_app/repo/open_ai_repo.dart';
 import 'package:chat_app/repo/room_repo.dart';
 import 'package:chat_app/service/message_service.dart';
+import 'package:chat_app/view_model/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -52,6 +54,22 @@ class ChatRoomPageViewModel with ChangeNotifier {
     await MessageRemoteRepo().createMessage(message);
     await RoomRemoteRepo().patchMessage(_room.id, _room.messageIds);
     MessageService.addMessage(message);
+    notifyListeners();
+
+    if (!Utils().isAiRoom(_room)) return;
+    final aiReply = await OpenAiRepo().getReply(content);
+    if (aiReply == null) return;
+    final aiMessage = Message(
+      id: const Uuid().v4(),
+      sourceUid: "ai",
+      content: aiReply,
+      createdTime: DateTime.now().toUtc(),
+      updatedTime: DateTime.now().toUtc(),
+    );
+    _room.messageIds.add(aiMessage.id);
+    await MessageRemoteRepo().createMessage(aiMessage);
+    await RoomRemoteRepo().patchMessage(_room.id, _room.messageIds);
+    MessageService.addMessage(aiMessage);
     notifyListeners();
   }
 }
