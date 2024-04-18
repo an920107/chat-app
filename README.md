@@ -66,6 +66,8 @@ A simple chat app for the assignment of Line intern.
      dart run build_runner build
      ```
 
+  3. Copy [`.env.example`](.env.example) as `.env`, and append OpenAI secret key to it.
+
 - There is a workflow (CI) set up for this repository.
 
   ![CI](images/screenshot_ci.png)
