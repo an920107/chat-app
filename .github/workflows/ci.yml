@@ -38,6 +38,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - name: Set up environment
+        run: echo "${{ secrets.OPENAI_SECRET }}"
       - name: Resolve Flutter dependency
         run: flutter pub get
       - name: Build release apk
