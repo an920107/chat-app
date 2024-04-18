@@ -19,6 +19,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - name: Set up environment
+        run: echo "OPENAI_SECRET=${{ secrets.OPENAI_SECRET }}" >> .env
       - name: Resolve Flutter dependency
         run: |
           flutter pub get
@@ -39,7 +41,7 @@ jobs:
         with:
           channel: stable
       - name: Set up environment
-        run: echo "${{ secrets.OPENAI_SECRET }}" >> .env
+        run: echo "OPENAI_SECRET=${{ secrets.OPENAI_SECRET }}" >> .env
       - name: Resolve Flutter dependency
         run: flutter pub get
       - name: Build release apk
