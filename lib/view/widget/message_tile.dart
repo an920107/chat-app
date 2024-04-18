@@ -61,9 +61,11 @@ class MessageTile extends StatelessWidget {
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width / 1.6,
                         ),
-                        child: Text(
-                          content,
-                          softWrap: true,
+                        child: SelectionArea(
+                          child: Text(
+                            content,
+                            softWrap: true,
+                          ),
                         ),
                       ),
                     ),
