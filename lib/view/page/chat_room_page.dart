@@ -105,17 +105,21 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       maxLines: 5,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      await context
-                          .read<ChatRoomPageViewModel>()
-                          .sendMessage(_textController.text);
-                      _textController.clear();
-                      if (context.mounted) {
-                        FocusScope.of(context).requestFocus(_textFocusNode);
-                      }
-                    },
-                    icon: const Icon(Icons.send),
+                  Consumer<ChatRoomPageViewModel>(
+                    builder: (context, value, child) => IconButton(
+                      onPressed: !value.sendMessageLock
+                          ? () async {
+                              final content = _textController.text;
+                              _textController.clear();
+                              await value.sendMessage(content);
+                              if (context.mounted) {
+                                FocusScope.of(context)
+                                    .requestFocus(_textFocusNode);
+                              }
+                            }
+                          : null,
+                      icon: const Icon(Icons.send),
+                    ),
                   ),
                 ],
               ),

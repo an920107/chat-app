@@ -40,7 +40,15 @@ class ChatRoomPageViewModel with ChangeNotifier {
     });
   }
 
+  bool _sendMessageLock = false;
+  bool get sendMessageLock => _sendMessageLock;
+
   Future<void> sendMessage(String content) async {
+    if (content.trim().isEmpty) return;    
+
+    _sendMessageLock = true;
+    notifyListeners();
+
     if (_room.id.isEmpty) throw Exception("Room not found");
     final message = Message(
       id: const Uuid().v4(),
@@ -56,9 +64,17 @@ class ChatRoomPageViewModel with ChangeNotifier {
     MessageService.addMessage(message);
     notifyListeners();
 
-    if (!Utils().isAiRoom(_room)) return;
+    if (!Utils().isAiRoom(_room)) {
+      _sendMessageLock = false;
+      notifyListeners();
+      return;
+    }
     final aiReply = await OpenAiRepo().getReply(content);
-    if (aiReply == null) return;
+    if (aiReply == null) {
+      _sendMessageLock = false;
+      notifyListeners();
+      return;
+    }
     final aiMessage = Message(
       id: const Uuid().v4(),
       sourceUid: "ai",
@@ -70,6 +86,7 @@ class ChatRoomPageViewModel with ChangeNotifier {
     await MessageRemoteRepo().createMessage(aiMessage);
     await RoomRemoteRepo().patchMessage(_room.id, _room.messageIds);
     MessageService.addMessage(aiMessage);
+    _sendMessageLock = false;
     notifyListeners();
   }
 }
